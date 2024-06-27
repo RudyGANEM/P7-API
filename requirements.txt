@@ -1,0 +1,20 @@
+pandas 
+
+scikit-learn
+imbalanced-learn
+
+shap
+
+fastapi
+requests
+uvicorn 
+
+black 
+
+pytest 
+
+
+# jupyter 
+# notebook
+# jupyterlab
+# ipython 
