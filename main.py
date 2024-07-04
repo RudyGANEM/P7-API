@@ -9,22 +9,29 @@ It should contain the following endpoints:
 - ping: Check if the app is up and running.
 """
 
-import pickle, json
-from fastapi import FastAPI
+import pickle, json,  joblib
 import pandas as pd
+from fastapi import FastAPI
+import uvicorn
+from colorama import init
 
 # create the FastAPI app
 app = FastAPI()
 
+df = pd.read_csv("df_preprocessed_1000.csv")
 
-# load the dataset
-# df = pd.read_csv("MY-DATASET.csv")
+with open('feature_importance.json', 'r') as file:
+    data = json.load(file)
 
-# load the model and the explanation
-# model = pickle.load("MY-MODEL.pkl")
+with open('grid2_export.pk', 'rb') as file:
+    model = joblib.load(file)
 
-# explanation_dict = json.load("MY-EXPLANATION.json")  #
-# explanation_dict = pickle.load("MY-EXPLANATION.pkl")  #
+
+
+#df['AMT_INCOME_TOTAL'] = df['AMT_INCOME_TOTAL'].apply(lambda x: '{:,.0f}'.format(x))
+#df['AGE'] = - df.DAYS_BIRTH / 365
+df['DAYS_BIRTH'].round(1)
+#df['AMT_CREDIT'] = df['AMT_CREDIT'].apply(lambda x: '{:,.0f}'.format(x))
 
 
 @app.get("/list_client_ids")
@@ -34,8 +41,10 @@ async def list_client_ids():
     # should implement the logic to list all client ids
 
     # Build a list of client ids and return it
+    client_ids_list = df['SK_ID_CURR'].tolist()
 
-    return {"client_ids": [1, 2, 3]}
+    return {"client_ids": client_ids_list}
+
 
 
 @app.get("/summarize")
@@ -45,22 +54,29 @@ async def summarize():
     # should implement the logic to give dataset insights (e.g., mean, std, etc. on each feature for the dataset)
 
     # describe the dataset
+
     return {
-        "salary": {"mean": 1, "std": 2},
-        "age": {"mean": 3, "std": 4},
-        "amount": {"mean": 5, "std": 6},
+        "AMT_INCOME_TOTAL": {"mean": df['AMT_INCOME_TOTAL'].mean(), "std": df['AMT_INCOME_TOTAL'].std()},
+        "AGE": {"mean": df['DAYS_BIRTH'].mean(), "std": df['DAYS_BIRTH'].std()},
+        "AMT_CREDIT": {"mean": df['AMT_CREDIT'].mean(), "std": df['AMT_CREDIT'].std()},
     }
+
 
 
 @app.get("/client_info/{client_id}")
 async def client_info(client_id):
     """Get client info."""
 
-    # should implement the logic to client_info : dive all usefull information about the client
+    # should implement the logic to client_info : give all usefull information about the client
 
     # answer wih the client info
 
-    return {"salary": 1, "age": 2, "amount": 3, "client_id": 4}
+    return {"AMT_INCOME_TOTAL": df.loc[df['SK_ID_CURR'] == int(client_id), 'AMT_INCOME_TOTAL'].values[0], 
+            "AGE": df.loc[df['SK_ID_CURR'] == int(client_id), 'DAYS_BIRTH'].values[0], 
+            "AMT_CREDIT": df.loc[df['SK_ID_CURR'] == int(client_id), 'AMT_CREDIT'].values[0], 
+            "client_id": int(client_id)
+           }
+
 
 
 @app.get("/predict/{client_id}")
@@ -77,18 +93,43 @@ async def predict(client_id):
     # make the prediction
     # return the prediction
 
-    return {"prediction": 1}
+    df_client_id = df.loc[df['SK_ID_CURR'] == int(client_id), :]
+    df_client_id = df_client_id.drop(['SK_ID_CURR'], axis=1)
+    prediction = model.predict(df_client_id)
+    predict_proba = model.predict_proba(df_client_id)
+    
+    return {
+            "prediction": prediction[0].item(),
+            "predict_proba_0": predict_proba[0, 0].round(2),
+            "predict_proba_1": predict_proba[0, 1].round(2),
+           }
 
-
-@app.get("/explanation/{client_id}")
-async def explanation(client_id):
-    """Get client info."""
-
-    # should implement the logic to explanation the decision with feature importance
-    # answer wih the feature importance dic t
-    return {"salary": 1, "age": 2, "amount": 3, "client_id": 4}
 
 
 @app.get("/ping")
 async def root():
     return "pong"
+
+
+
+
+@app.get("/")
+def index():
+    return {"message": "Welcome to fastapi"}
+
+
+@app.get("/items")
+def get_items():
+    return [
+        {"id": 1, "description": "Item 1"},
+        {"id": 2, "description": "Item 2"},
+        {"id": 3, "description": "Item 3"},
+    ]
+
+
+
+
+ 
+if __name__ == '__main__':
+    init()
+    uvicorn.run(app, host = "127.0.0.1", port=8000)
