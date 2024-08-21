@@ -14,6 +14,8 @@ import pandas as pd
 from fastapi import FastAPI
 import uvicorn
 from colorama import init
+import shap
+import streamlit as st
 
 # create the FastAPI app
 app = FastAPI()
@@ -27,11 +29,33 @@ with open('grid2_export.pk', 'rb') as file:
     model = joblib.load(file)
 
 
+st.dataframe(df.head())
 
 #df['AMT_INCOME_TOTAL'] = df['AMT_INCOME_TOTAL'].apply(lambda x: '{:,.0f}'.format(x))
 #df['AGE'] = - df.DAYS_BIRTH / 365
 df['DAYS_BIRTH'].round(1)
 #df['AMT_CREDIT'] = df['AMT_CREDIT'].apply(lambda x: '{:,.0f}'.format(x))
+
+
+
+
+best_estimator = model.best_estimator_
+preprocessor_pipe = best_estimator[:-1]
+df_transformed = best_estimator.named_steps['columntransformer'].transform(df)
+explainer = shap.LinearExplainer(best_estimator.named_steps['estimator'], df_transformed, feature_perturbation="interventional")
+shap_values = explainer.shap_values(df_transformed)
+
+
+@app.get("/")
+def index():
+    return {"message": "Welcome to fastapi"}
+
+
+
+@app.get("/ping")
+async def root():
+    return "pong"
+
 
 
 @app.get("/list_client_ids")
@@ -105,17 +129,20 @@ async def predict(client_id):
            }
 
 
+@app.get("/explanation/{client_id}")
+async def explanation(client_id):
+    """Get client info."""
+    # should implement the logic to explanation the decision with feature importance
+    # answer wih the feature importance dic t
+    client_id_index = df.index[df['SK_ID_CURR'] == int(client_id)].tolist()[0]
+    return dict(zip(preprocessor_pipe.get_feature_names_out(), shap_values[client_id_index]))
 
-@app.get("/ping")
-async def root():
-    return "pong"
 
 
 
 
-@app.get("/")
-def index():
-    return {"message": "Welcome to fastapi"}
+
+
 
 
 @app.get("/items")
@@ -132,4 +159,4 @@ def get_items():
  
 if __name__ == '__main__':
     init()
-    uvicorn.run(app, host = "127.0.0.1", port=8000)
+    uvicorn.run(app, host = "127.0.0.1", port=8080)
