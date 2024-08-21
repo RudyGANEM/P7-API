@@ -17,7 +17,6 @@ colorama
 
 streamlit
 
-json
 joblib
 
 # jupyter 
