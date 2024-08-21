@@ -17,6 +17,10 @@ colorama
 
 streamlit
 
+pickle
+json
+joblib
+
 # jupyter 
 # notebook
 # jupyterlab
