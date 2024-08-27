@@ -16,7 +16,6 @@ import uvicorn
 from colorama import init
 import shap
 import streamlit as st
-from sklearn.metrics._scorer import _SCORERS
 
 # create the FastAPI app
 app = FastAPI()
