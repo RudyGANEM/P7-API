@@ -1,7 +1,7 @@
 # This file may be used to create an environment using:
 # $ conda create --name <env> --file <this file>
 # platform: win-64
-_anaconda_depends==2023.09
+#_anaconda_depends==2023.09
 _ipyw_jlab_nb_ext_conf==0.1.0
 _tflow_select==2.3.0
 abseil-cpp==20211102.0
