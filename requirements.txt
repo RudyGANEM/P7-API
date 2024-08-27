@@ -4,7 +4,7 @@
 #_anaconda_depends==2023.09
 #_ipyw_jlab_nb_ext_conf==0.1.0
 #_tflow_select==2.3.0
-abseil-cpp==20211102.0
+#abseil-cpp==20211102.0
 absl-py==2.1.0
 aiobotocore==2.7.0
 aiohttp==3.9.0
