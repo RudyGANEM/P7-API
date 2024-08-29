@@ -1,23 +1,15 @@
-joblib
-
-pandas 
-
-scikit-learn
-imbalanced-learn
-
-shap
-
-fastapi
-requests
-uvicorn 
-
 black 
-
-pytest 
-
 colorama
-
+fastapi
+joblib
+imbalanced-learn
+pandas 
+pytest 
+requests
+scikit-learn
+shap
 streamlit
+uvicorn 
 
 
 # jupyter 
