@@ -41,22 +41,31 @@ jobs:
         pytest
 
     # If the tests pass, build the application
-    - name: Build the Application
-      run: |
-        echo "Building the application..."
-        # You might want to perform tasks like compiling, or simply packaging the application
-        # For Python, this might just mean ensuring that all dependencies are collected
+    #- name: Build the Application
+    #  run: |
+    #    echo "Building the application..."
+    #    # You might want to perform tasks like compiling, or simply packaging the application
+    #    # For Python, this might just mean ensuring that all dependencies are collected
 
     # If build and tests pass, deploy the application to a server
-    - name: Deploy the Application
-      run: |
-        echo "Deploying the application..."
-        # Example: You could use a script or a deployment tool to deploy to your server
-        # Here's how you might use scp (secure copy) to deploy to a remote server
-        # scp -r ./* username@server:/path/to/deployment/
-        # Or use a specialized deployment tool or script
+    #- name: Deploy the Application
+    #  run: |
+    #    echo "Deploying the application..."
+    #    # Example: You could use a script or a deployment tool to deploy to your server
+    #    # Here's how you might use scp (secure copy) to deploy to a remote server
+    #    # scp -r ./* username@server:/path/to/deployment/
+    #    # Or use a specialized deployment tool or script
 
     # This step will notify you if the deployment is successful
-    - name: Notify Deployment Status
-      run: |
-        echo "Application deployed successfully!"
+    #- name: Notify Deployment Status
+    #  run: |
+    #    echo "Application deployed successfully!"
+        
+      - name: Deploy to Render
+        env:
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}  # Ajoutez votre clé API Render dans GitHub Secrets
+        run: |
+          echo "Deploy to Render..."
+          curl -X POST "https://api.render.com/deploy/srv-cr2unk3v2p9s739efg60/deploys" \
+          -H "Accept: application/json" \
+          -H "Authorization: Bearer $RENDER_API_KEY"
