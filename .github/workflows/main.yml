@@ -32,12 +32,12 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install fastapi uvicorn pytest joblib pandas colorama shap streamlit
+        pip install fastapi==0.96.1 uvicorn pytest joblib pandas colorama shap streamlit
 
     # Run tests to ensure that the build is not broken
     - name: Run tests
       run: |
-        echo "Running Rudy's tests..."
+        echo "Running Rudy GANEM's tests..."
         pytest
 
     # If the tests pass, build the application
