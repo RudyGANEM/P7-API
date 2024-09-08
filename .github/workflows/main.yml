@@ -37,7 +37,7 @@ jobs:
     # Run tests to ensure that the build is not broken
     - name: Run tests
       run: |
-        echo "Running tests..."
+        echo "Running Rudy's tests..."
         pytest
 
     # If the tests pass, build the application
