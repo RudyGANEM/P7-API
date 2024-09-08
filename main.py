@@ -9,7 +9,7 @@ It should contain the following endpoints:
 - ping: Check if the app is up and running.
 """
 
-import pickle, json
+import pickle, json, joblib
 import pandas as pd
 from fastapi import FastAPI
 import uvicorn
