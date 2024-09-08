@@ -26,7 +26,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
-        python-version: '3.9'  # Ensure this matches the Python version you're using locally
+        python-version: '3.9.18'  # Ensure this matches the Python version you're using locally
 
     # Installs dependencies using pip
     - name: Install dependencies
