@@ -68,6 +68,4 @@ jobs:
         RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}  # Ajoutez votre clé API Render dans GitHub Secrets
       run: |
         echo "Deploying the application to Render 1..."
-        curl -X POST "https://api.render.com/deploy/srv-cr2unk3v2p9s739efg60/deploys" \
-        -H "Accept: application/json" \
-        -H "Authorization: Bearer $RENDER_API_KEY"
+        curl -X POST "https://api.render.com/deploy/srv-cr2unk3v2p9s739efg60/deploys" -H "Accept: application/json" -H "Authorization: Bearer $RENDER_API_KEY"
