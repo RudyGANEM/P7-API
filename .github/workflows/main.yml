@@ -32,7 +32,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install fastapi uvicorn pytest
+        pip install fastapi uvicorn pytest joblib
 
     # Run tests to ensure that the build is not broken
     - name: Run tests
