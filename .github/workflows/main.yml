@@ -64,8 +64,8 @@ jobs:
 
     # This step will notify you if the deployment is successful
     - name: Deploy to Render
-      env:
-        RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}  # Ajoutez votre clé API Render dans GitHub Secrets
+      #env:
+        #RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}  # Ajoutez votre clé API Render dans GitHub Secrets
       run: |
-        echo "Deploying the application to Render 2..."
-        curl -X POST "https://api.render.com/deploy/srv-cr2unk3v2p9s739efg60/deploys" -H "Accept: application/json" -H "Authorization: Bearer $RENDER_API_KEY"
+        echo "Deploying the application to Render 3..."
+        curl -X POST "https://api.render.com/deploy/srv-cr2unk3v2p9s739efg60?key=Jdxj9dCLBmA"
